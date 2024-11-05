@@ -152,11 +152,11 @@ class Dobot:
         msg.id = CommunicationProtocolIDs.SET_GET_END_EFFECTOR_SUCTION_CUP
         msg.ctrl = ControlValues.THREE
         msg.params = bytearray([])
-        msg.params.extend(bytearray([0x01]))
         if enable is True:
             msg.params.extend(bytearray([0x01]))
         else:
             msg.params.extend(bytearray([0x00]))
+        msg.params.extend(bytearray([0x01]))
         return self._send_command(msg)
 
     """
@@ -285,6 +285,13 @@ class Dobot:
         msg.params.extend(bytearray([level]))
         return self._send_command(msg)
 
+    def _home(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_HOME_CMD
+        msg.ctrl = ControlValues.THREE
+        msg.params = bytearray([0x00, 0x00, 0x00, 0x00])
+        return self._send_command(msg, wait=True)
+
     def get_eio(self, addr):
         return self._get_eio_level(addr)
 
@@ -330,3 +337,6 @@ class Dobot:
         j3 = struct.unpack_from('f', response.params, 24)[0]
         j4 = struct.unpack_from('f', response.params, 28)[0]
         return x, y, z, r, j1, j2, j3, j4
+
+    def home(self):
+        self._home()
