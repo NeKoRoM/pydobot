@@ -31,7 +31,7 @@ class Message:
         Aktualizuje długość i sumę kontrolną wiadomości.
         """
         if self.checksum is None:
-            self.checksum = self.id + self.ctrl
+            self.checksum = int(self.id) + int(self.ctrl)
             for byte in self.params:
                 if isinstance(byte, int):
                     self.checksum += byte
