@@ -340,3 +340,156 @@ class Dobot:
 
     def home(self):
         self._home()
+
+    """
+        Get the serial number of the device
+    """
+    def get_device_sn(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_SET_DEVICE_SN
+        response = self._send_command(msg)
+        return response.params.decode('ascii')
+
+    """
+        Get the device name
+    """
+    def get_device_name(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_SET_DEVICE_NAME
+        response = self._send_command(msg)
+        return response.params.decode('ascii')
+
+    """
+        Set the device name
+    """
+    def set_device_name(self, name):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_SET_DEVICE_NAME
+        msg.ctrl = ControlValues.ONE
+        msg.params = name.encode('ascii')
+        return self._send_command(msg)
+
+    """
+        Reset the pose to a default position
+    """
+    def reset_pose(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.RESET_POSE
+        return self._send_command(msg)
+
+    """
+        Clear all alarms
+    """
+    def clear_alarms(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.CLEAR_ALL_ALARMS_STATE
+        return self._send_command(msg)
+
+    """
+        Get alarms state
+    """
+    def get_alarms(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_ALARMS_STATE
+        response = self._send_command(msg)
+        return response.params
+
+    """
+        Set home parameters
+    """
+    def set_home_params(self, x, y, z, r):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_HOME_PARAMS
+        msg.ctrl = ControlValues.ONE
+        msg.params = bytearray([])
+        msg.params.extend(bytearray(struct.pack('f', x)))
+        msg.params.extend(bytearray(struct.pack('f', y)))
+        msg.params.extend(bytearray(struct.pack('f', z)))
+        msg.params.extend(bytearray(struct.pack('f', r)))
+        return self._send_command(msg)
+
+    """
+        Get home parameters
+    """
+    def get_home_params(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_HOME_PARAMS
+        response = self._send_command(msg)
+        x = struct.unpack_from('f', response.params, 0)[0]
+        y = struct.unpack_from('f', response.params, 4)[0]
+        z = struct.unpack_from('f', response.params, 8)[0]
+        r = struct.unpack_from('f', response.params, 12)[0]
+        return x, y, z, r
+
+    """
+        Configure HHT trigger mode
+    """
+    def set_hht_trigger_mode(self, mode):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_HHTTRIG_MODE
+        msg.ctrl = ControlValues.ONE
+        msg.params = bytearray([mode])
+        return self._send_command(msg)
+
+    """
+        Get HHT trigger mode
+    """
+    def get_hht_trigger_mode(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_HHTTRIG_MODE
+        response = self._send_command(msg)
+        return response.params[0]
+
+    """
+        Get the HHT trigger output
+    """
+    def get_hht_trigger_output(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_HHTTRIG_OUTPUT
+        response = self._send_command(msg)
+        return response.params[0]
+
+    """
+        Set arm orientation
+    """
+    def set_arm_orientation(self, orientation):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_ARM_ORIENTATION
+        msg.ctrl = ControlValues.ONE
+        msg.params = bytearray([orientation])
+        return self._send_command(msg)
+
+    """
+        Get arm orientation
+    """
+    def get_arm_orientation(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_ARM_ORIENTATION
+        response = self._send_command(msg)
+        return response.params[0]
+
+    """
+        Configure the end effector parameters
+    """
+    def set_end_effector_params(self, x, y, z):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_END_EFFECTOR_PARAMS
+        msg.ctrl = ControlValues.ONE
+        msg.params = bytearray([])
+        msg.params.extend(bytearray(struct.pack('f', x)))
+        msg.params.extend(bytearray(struct.pack('f', y)))
+        msg.params.extend(bytearray(struct.pack('f', z)))
+        return self._send_command(msg)
+
+    """
+        Get end effector parameters
+    """
+    def get_end_effector_params(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_GET_END_EFFECTOR_PARAMS
+        response = self._send_command(msg)
+        x = struct.unpack_from('f', response.params, 0)[0]
+        y = struct.unpack_from('f', response.params, 4)[0]
+        z = struct.unpack_from('f', response.params, 8)[0]
+        return x, y, z
+
