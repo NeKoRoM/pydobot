@@ -30,8 +30,10 @@ class Message:
         """
         Aktualizuje długość i sumę kontrolną wiadomości.
         """
+        self.ctrl = self.ctrl.value if type(self.ctrl) != type(0) else self.ctrl
+        self.id = self.id.value if type(self.id) != type(0) else self.id
         if self.checksum is None:
-            self.checksum = int(self.id) + int(self.ctrl)
+            self.checksum = self.id + self.ctrl
             for byte in self.params:
                 if isinstance(byte, int):
                     self.checksum += byte
