@@ -383,6 +383,7 @@ class Dobot:
     def clear_alarms(self):
         msg = Message()
         msg.id = CommunicationProtocolIDs.CLEAR_ALL_ALARMS_STATE
+        msg.ctrl = ControlValues.THREE.value  # Kolejkowany zapis
         return self._send_command(msg)
 
     """
