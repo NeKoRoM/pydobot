@@ -3,7 +3,7 @@
 Python library for Dobot Magician
 ===
 
-Based on Communication Protocol V1.1.5 (_latest version [here]([https://www.dobot.cc/downloadcenter.html?sub_cat=72#sub-download](https://www.dobot-robots.com/service/download-center?keyword=&products%5B%5D=316))_)
+Based on Communication Protocol V1.1.5 https://www.dobot-robots.com/service/download-center?keyword=&products%5B%5D=316
 
 
 Installation
