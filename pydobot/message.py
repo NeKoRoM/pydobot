@@ -27,20 +27,21 @@ class Message:
         return f"{hex_header}:{self.len}:{self.id}:{self.ctrl}:{hex_params}:{self.checksum}".upper()
 
     def refresh(self):
-        """
-        Aktualizuje długość i sumę kontrolną wiadomości.
-        """
         self.ctrl = self.ctrl.value if type(self.ctrl) != type(0) else self.ctrl
         self.id = self.id.value if type(self.id) != type(0) else self.id
         if self.checksum is None:
             self.checksum = self.id + self.ctrl
-            for byte in self.params:
-                if isinstance(byte, int):
-                    self.checksum += byte
-            self.checksum %= 256
-            self.checksum = (256 - self.checksum) % 256
-        self.len = 0x02 + len(self.params)  # Długość = nagłówek (2 bajty) + parametry
+            for i in range(len(self.params)):
+                if isinstance(self.params[i], int):
+                    self.checksum += self.params[i]
+                else:
+                    self.checksum += int(self.params[i].encode('hex'), 16)
+            self.checksum = self.checksum % 256
+            self.checksum = 2 ** 8 - self.checksum
+            self.checksum = self.checksum % 255 # TODO verify this
+            self.len = 0x02 + len(self.params)
 
+    
     def bytes(self):
         """
         Zwraca wiadomość jako ciąg bajtów.
